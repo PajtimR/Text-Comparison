@@ -13,8 +13,11 @@ def equalize(s1, s2):
     res1 = []
     res2 = []
     prev = difflib.Match(0, 0, 0)
+    # Iterate through matching blocks using SequenceMatcher
     for match in difflib.SequenceMatcher(a=l1, b=l2).get_matching_blocks():
+        # Check for unmatched tokens between the previous and current match in the first sequence (l1)
         if prev.a + prev.size != match.a:
+            # Add placeholder tokens for unmatched tokens in the second sequence (res2)
             for i in range(prev.a + prev.size, match.a):
                 res2 += ['_' * len(l1[i])]
             res1 += l1[prev.a + prev.size:match.a]
@@ -24,7 +27,7 @@ def equalize(s1, s2):
             res2 += l2[prev.b + prev.size:match.b]
         res1 += l1[match.a:match.a + match.size]
         res2 += l2[match.b:match.b + match.size]
-        prev = match
+        prev = match #updating for the next iteration
     return untokenize(res1), untokenize(res2)
 
 def insert_newlines(string, every=64, window=10):
